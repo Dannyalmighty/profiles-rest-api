@@ -5,12 +5,11 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserProfileManager(BaseUserManager):
-    """manger for user profiles"""
-
+    """Manager for user profiles"""
     def create_user(self, email, name, password=None):
-        """Create a new user profile"""
+        """create a new user profiles"""
         if not email:
-            raise ValueError('User must have an email address')
+            raise ValueError('user must have a valid email address')
 
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
@@ -18,14 +17,14 @@ class UserProfileManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
 
-    def create_superuser(self, email, name, password):
-        """Create and save a new sueruser with given details"""
-        user = self.create_user(email, name, password)
+        return user
 
+    def create_superuser(self, email, name, password):
+        """create a new superuser"""
+        user = self.create_user(email, name, password)
         user.is_superuser = True
         user.is_staff = True
-        user.save(using=self._db)
-
+        user.save(using=self.db)
         return user
 
 
